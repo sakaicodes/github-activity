@@ -9,6 +9,9 @@ import (
 )
 
 func GetEvents(username string) ([]byte, int) {
+	// API call to GitHub to get the events for a user
+	// Construct the API URL with the provided username
+	//Return the response body and status code
 	req, err := http.NewRequest("GET", "https://api.github.com/users/"+username+"/events", nil)
 	if err != nil {
 		panic(err)
@@ -33,6 +36,9 @@ func GetEvents(username string) ([]byte, int) {
 }
 
 func GetEventsByType(username string, eventType string) ([]byte, int) {
+	// API call to GitHub to get the events for a user and filter by event type
+	// Construct the API URL with the provided username
+	// Return the response body and status code
 	marshalled_events := []models.Event{}
 	filtered_events := []models.Event{}
 
