@@ -29,10 +29,12 @@ func FilterEvent() {
 	fmt.Println()
 
 	//API call to get events by type
-	body, status := apis.GetEventsByType(username, *eventType)
+	body, count, status := apis.GetEventsByType(username, *eventType)
 
 	// Output the results
 	fmt.Println("Status Code:", status)
+	fmt.Println()
+	fmt.Println("Event Count:", count)
 	var pretty bytes.Buffer
 	json.Indent(&pretty, body, "", "  ")
 	fmt.Println("Response Body:", pretty.String())

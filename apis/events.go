@@ -8,10 +8,10 @@ import (
 	"github.com/sakaicodes/github-activity/models"
 )
 
+// API call to GitHub to get the events for a user
+// Construct the API URL with the provided username
+// Return the response body and status code
 func GetEvents(username string) ([]byte, int) {
-	// API call to GitHub to get the events for a user
-	// Construct the API URL with the provided username
-	//Return the response body and status code
 	req, err := http.NewRequest("GET", "https://api.github.com/users/"+username+"/events", nil)
 	if err != nil {
 		panic(err)
@@ -35,16 +35,16 @@ func GetEvents(username string) ([]byte, int) {
 	return body, resp.StatusCode
 }
 
-func GetEventsByType(username string, eventType string) ([]byte, int) {
-	// API call to GitHub to get the events for a user and filter by event type
-	// Construct the API URL with the provided username
-	// Return the response body and status code
+// API call to GitHub to get the events for a user and filter by event type
+// Construct the API URL with the provided username
+// Return the response body and status code
+func GetEventsByType(username string, eventType string) ([]byte, int, int) {
 	marshalled_events := []models.Event{}
 	filtered_events := []models.Event{}
 
 	resp, status := GetEvents(username)
 	if status != http.StatusOK {
-		return nil, status
+		return nil, 0, status
 	}
 	err := json.Unmarshal(resp, &marshalled_events)
 	if err != nil {
@@ -57,11 +57,11 @@ func GetEventsByType(username string, eventType string) ([]byte, int) {
 			filtered_events = append(filtered_events, event)
 		}
 	}
+	activity_count := len(filtered_events)
 	data, err := json.Marshal(filtered_events)
-
 	if err != nil {
 		panic(err)
 	}
-	return data, http.StatusOK
+	return data, activity_count, http.StatusOK
 
 }
